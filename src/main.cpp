@@ -1,140 +1,136 @@
 #include "raylib.h"
 #include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 
-// Caesar cipher encryption
-char EncryptChar(char c, int shift) {
-    if (c >= 'A' && c <= 'Z') {
-        return 'A' + (c - 'A' + shift) % 26;
-    } else if (c >= 'a' && c <= 'z') {
-        return 'a' + (c - 'a' + shift) % 26;
+
+char *EncryptMessage(const char *message, int key) {
+
+    char *encryptedMessage = (char *)malloc(strlen(message) + 1); 
+    if (!encryptedMessage) {
+        return NULL; // Handle memory allocation failure
     }
-    return c; // Non-alphabetic characters remain unchanged
+
+  
+    for (int i = 0; message[i] != '\0'; i++) {
+        if (message[i] >= 'A' && message[i] <= 'Z') {
+            encryptedMessage[i] = 'A' + (message[i] - 'A' + key) % 26;
+        } else if (message[i] >= 'a' && message[i] <= 'z') {
+            encryptedMessage[i] = 'a' + (message[i] - 'a' + key) % 26;
+        } else {
+            encryptedMessage[i] = message[i]; 
+        }
+    }
+
+    encryptedMessage[strlen(message)] = '\0';
+    return encryptedMessage;
+}
+
+
+char *DecryptMessage(const char *message, int key) {
+    
+    char *decryptedMessage = (char *)malloc(strlen(message) + 1); 
+    if (!decryptedMessage) {
+        return NULL; 
+    }
+
+  
+    for (int i = 0; message[i] != '\0'; i++) {
+        if (message[i] >= 'A' && message[i] <= 'Z') {
+            decryptedMessage[i] = 'A' + (message[i] - 'A' - key + 26) % 26; 
+        } else if (message[i] >= 'a' && message[i] <= 'z') {
+            decryptedMessage[i] = 'a' + (message[i] - 'a' - key + 26) % 26; 
+        } else {
+            decryptedMessage[i] = message[i]; 
+        }
+    }
+
+    // Null-terminate the decrypted string
+    decryptedMessage[strlen(message)] = '\0';
+
+    return decryptedMessage;
 }
 
 int main(void) {
-    const int screenWidth = 900;
+    const int screenWidth = 1100;
     const int screenHeight = 600;
 
-    // Initialize Raylib
-    InitWindow(screenWidth, screenHeight, "Select Menu with Encryption");
+    InitWindow(screenWidth, screenHeight, "Symmetric Encryption Animation");
+
     SetTargetFPS(60);
 
-    Color bgColor = DARKGRAY;
-    Color buttonColor = LIGHTGRAY;
-    Color buttonHoverColor = GRAY;
-    Color textColor = WHITE;
+    char *message = "HELLO world!";
+    int key = 3;  
+ 
+    Vector2 position = {600, 0};  // Starting position
+    Vector2 mesposition = {220, 250};  // Starting position
+    Vector2 velocity = {1, 1};      // Speed in pixels per frame
 
-    // Define button rectangles
-    Rectangle button1 = { screenWidth / 2 - 150, 200, 300, 50 };
-    Rectangle button2 = { screenWidth / 2 - 150, 300, 300, 50 };
+    Image keys = LoadImage("img/key.png"); //n7oto l image f var
+    ImageResize(&keys, 80, 80); 
+    Texture2D texture = LoadTextureFromImage(keys);          
+    UnloadImage(keys);  
 
-    int selectedOption = -1; // -1: None, 0: Option 1, 1: Option 2
+    Image pc1 = LoadImage("img/pc.png"); //n7oto l image f var
+    ImageResize(&pc1, 200, 200); 
+    Texture2D pc1texture = LoadTextureFromImage(pc1);          
+    UnloadImage(pc1);
 
-    // Encryption variables
-    char inputText[256] = "";
-    char encryptedText[256] = "";
-    int currentIndex = 0;
-    int shiftValue = 3; // Example shift for Caesar cipher
-    bool encryptionComplete = false;
+    Image pc2 = LoadImage("img/pc.png"); //n7oto l image f var
+    ImageResize(&pc2, 200, 200); 
+    Texture2D pc2texture = LoadTextureFromImage(pc2);          
+    UnloadImage(pc2);
 
-    while (!WindowShouldClose()) {
-        // Check mouse clicks on buttons
-        Vector2 mousePoint = GetMousePosition();
+    Image mes = LoadImage("img/messag.png"); //n7oto l image f var
+    ImageResize(&mes, 90, 90); 
+    Texture2D mestexture = LoadTextureFromImage(mes);          
+    UnloadImage(mes);
 
-        if (selectedOption == -1) {
-            // Main menu
-            if (CheckCollisionPointRec(mousePoint, button1)) {
-                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                    selectedOption = 0; // Option 1 selected
-                }
-            }
-            if (CheckCollisionPointRec(mousePoint, button2)) {
-                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                    selectedOption = 1; // Option 2 selected
-                }
-            }
-        } else if (selectedOption == 0) {
-            // Option 1: Encryption Animation
-            if (!encryptionComplete && IsKeyPressed(KEY_ENTER)) {
-                if (currentIndex < strlen(inputText)) {
-                    char currentChar = inputText[currentIndex];
-                    char encryptedChar = EncryptChar(currentChar, shiftValue);
-                    encryptedText[currentIndex] = encryptedChar;
-                    currentIndex++;
-                    encryptedText[currentIndex] = '\0'; // Null-terminate
-                } else {
-                    encryptionComplete = true;
-                }
-            }
+    SetTargetFPS(60);     
+    
 
-            // Typing text input
-            if (!encryptionComplete && currentIndex == 0) {
-                int key = GetCharPressed();
-                while (key > 0) {
-                    if ((key >= 32) && (key <= 125) && (strlen(inputText) < sizeof(inputText) - 1)) {
-                        size_t len = strlen(inputText);
-                        inputText[len] = (char)key;
-                        inputText[len + 1] = '\0';
-                    }
-                    key = GetCharPressed();
-                }
-            }
+    while (!WindowShouldClose())    
+    {
+        position.x -= velocity.x;
+        position.y += velocity.y;
+        if (position.x <= 350) {
+            position.x = 600;
+            position.y = 0;
+            message =  EncryptMessage(message , key);
 
-            // Clear text input with backspace
-            if (IsKeyPressed(KEY_BACKSPACE) && currentIndex == 0) {
-                size_t len = strlen(inputText);
-                if (len > 0) inputText[len - 1] = '\0';
-            }
+            velocity.x *= -1;
+            
+        } 
+
+
+        if (position.x >= 800) {
+            position.x = 600;
+            position.y = 0;
+            message =  DecryptMessage(message , key);
+            velocity.x *= -1;
         }
 
-        // Draw UI
+
+
         BeginDrawing();
-        ClearBackground(bgColor);
 
-        if (selectedOption == -1) {
-            // Draw main menu
-            DrawText("Select an Option", screenWidth / 2 - MeasureText("Select an Option", 30) / 2, 100, 30, textColor);
-
-            // Encryption Button
-            DrawRectangleRec(button1, CheckCollisionPointRec(mousePoint, button1) ? buttonHoverColor : buttonColor);
-            DrawText("Option 1: Encryption", screenWidth / 2 - MeasureText("Option 1: Encryption", 20) / 2, 215, 20, textColor);
-
-            // Placeholder Button for Option 2
-            DrawRectangleRec(button2, CheckCollisionPointRec(mousePoint, button2) ? buttonHoverColor : buttonColor);
-            DrawText("Option 2: Coming Soon", screenWidth / 2 - MeasureText("Option 2: Coming Soon", 20) / 2, 315, 20, textColor);
-        } else if (selectedOption == 0) {
-            // Option 1: Encryption UI
-            DrawText("Encryption Animation", screenWidth / 2 - MeasureText("Encryption Animation", 30) / 2, 20, 30, textColor);
-
-            // Input text section
-            DrawRectangle(50, 100, screenWidth - 100, 50, Fade(textColor, 0.2f));
-            DrawText("Enter text to encrypt:", 60, 110, 20, textColor);
-            DrawText(inputText, 300, 110, 20, textColor);
-
-            // Encrypted text section
-            DrawRectangle(50, 200, screenWidth - 100, 50, Fade(textColor, 0.2f));
-            DrawText("Encrypted Text:", 60, 210, 20, textColor);
-            DrawText(encryptedText, 300, 210, 20, RED);
-
-            // Status messages
-            if (encryptionComplete) {
-                DrawText("Encryption Complete! Press ESC to exit.", screenWidth / 2 - MeasureText("Encryption Complete! Press ESC to exit.", 20) / 2, 300, 20, textColor);
-            } else if (strlen(inputText) > 0) {
-                DrawText("Press Enter to encrypt the next letter.", screenWidth / 2 - MeasureText("Press Enter to encrypt the next letter.", 20) / 2, 300, 20, textColor);
-            } else {
-                DrawText("Type text and press Enter to start encryption.", screenWidth / 2 - MeasureText("Type text and press Enter to start encryption.", 20) / 2, 300, 20, textColor);
-            }
-
-            // Footer
-            DrawText("Press BACKSPACE to clear text.", 50, screenHeight - 50, 20, GRAY);
-        }
-
+            ClearBackground(WHITE);
+            
+            DrawTexture(texture, position.x, position.y, WHITE);
+            DrawTexture(pc1texture, 10, 180, WHITE);
+            DrawTexture(pc2texture, 880, 180, WHITE);
+            DrawTexture(mestexture, mesposition.x, mesposition.y, WHITE);
+            DrawText(message, 230, 270, 12, BLACK);
         EndDrawing();
+        
     }
 
-    // Close Raylib
-    CloseWindow();
 
+    UnloadTexture(texture);       
+
+    CloseWindow();                
+    
+
+    
     return 0;
 }
