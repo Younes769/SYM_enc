@@ -1,137 +1,113 @@
-# Symmetric Encryption Visualization Tool 🔐
+# Symmetric Encryption Visualization: An Interactive Educational Implementation
 
-An interactive educational tool that demonstrates how symmetric encryption works through animations and step-by-step visualization. This project helps users understand the basic concepts of encryption in a visual and engaging way.
+## Abstract
 
-## 🌟 Features
+This project presents an interactive educational tool designed to demonstrate the fundamental principles of symmetric encryption through dynamic visualization. The implementation utilizes the Caesar cipher algorithm as a foundational example to illustrate core cryptographic concepts, making complex encryption processes more accessible to learners.
 
-### 1. Interactive Animation Mode
+## Introduction
 
-- Visual representation of encryption/decryption process
-- Animated key movement between sender and receiver
-- Real-time message transformation
-- Pause/Resume functionality (Press P)
-- Restart capability (Press R)
-- Message status indicator
+Cryptography education often faces challenges in conveying abstract concepts effectively. This tool addresses this challenge by providing real-time visual representations of encryption processes, enabling users to observe and understand the transformation of data during encryption and decryption operations.
 
-### 2. Step-by-Step Learning Mode
+## Methodology
 
-- Interactive text input for custom messages
-- Detailed explanation of each encryption step
-- Position tracking in the alphabet
-- Visual transformation of each character
-- Scrollable interface for longer messages
-- Educational notes about real-world encryption
+### 1. Implementation Architecture
 
-## 🛠️ Prerequisites
+The system is implemented using C++ with the Raylib graphics framework, featuring two primary modes of operation:
 
-Before running this project, make sure you have:
+#### 1.1 Animation Mode
 
-1. C++ Compiler (MinGW-w64 recommended for Windows)
-2. Raylib Library (version 5.0 or higher)
-3. Basic understanding of command line operations
+- Real-time visualization of encryption/decryption processes
+- Dynamic key exchange representation
+- Message transformation visualization
+- Interactive control system (Pause/Resume/Restart)
+- Status monitoring interface
 
-## 📥 Installation
+#### 1.2 Step-by-Step Analysis Mode
 
-1. **Clone the Repository**
+- Character-level transformation analysis
+- Detailed position tracking in substitution cipher
+- Interactive message input system
+- Comprehensive step documentation
+- Scrollable interface for detailed examination
 
-   ```bash
-   git clone https://github.com/Younes769/SYM_enc.git
-   cd SYM_enc
-   ```
+### 2. Technical Implementation
 
-2. **Install Raylib**
+#### 2.1 Encryption Algorithm
 
-   - Download Raylib from [official website](https://www.raylib.com/)
-   - For Windows:
-     - Extract to `C:/raylib`
-     - Ensure the path structure is `C:/raylib/raylib-5.5_win64_mingw-w64`
+- Base Algorithm: Caesar Cipher
+- Key Length: 3 positions shift
+- Character Set: Full ASCII support
+- Case Sensitivity: Preserved
+- Special Character Handling: Maintained unchanged
 
-3. **Set Up Development Environment**
-   - Add MinGW-w64 to your system PATH
-   - Ensure raylib's include and lib directories are properly set up
+#### 2.2 System Architecture
 
-## 🚀 Building and Running
+- Language: C++ (Standard: C++11)
+- Graphics Framework: Raylib 5.0+
+- Build System: Make
+- Platform Compatibility: Windows (MinGW-w64)
 
-1. **Using Make**
+## Results and Usage
 
-   ```bash
-   mingw32-make
-   ```
+### 1. System Requirements
 
-2. **Run the Application**
-   ```bash
-   ./main
-   ```
+- C++ Compiler (MinGW-w64)
+- Raylib Library (≥ v5.0)
+- Windows Operating System
 
-## 🎮 How to Use
+### 2. Installation Protocol
 
-### Main Menu
+```bash
+git clone https://github.com/Younes769/SYM_enc.git
+cd SYM_enc
+mingw32-make
+```
 
-- Choose between two visualization modes:
-  - "Watch Animation" for the animated demonstration
-  - "Step-by-Step Learning" for interactive learning
+### 3. Operational Instructions
 
-### Animation Mode
+Execute `./main` to initiate the application.
 
-- Watch how messages are encrypted and decrypted
-- Controls:
-  - `P` - Pause/Resume animation
-  - `R` - Restart animation
-  - `ESC` - Return to menu
+#### 3.1 Animation Mode Controls
 
-### Step-by-Step Mode
+- P: Pause/Resume visualization
+- R: Reset animation sequence
+- ESC: Return to main interface
 
-- Type your own message
-- Press Enter to see the encryption process
-- Learn how each character is transformed
-- Controls:
-  - Mouse wheel to scroll through steps
-  - `R` - Try a new message
-  - `ESC` - Return to menu
+#### 3.2 Analysis Mode Controls
 
-## 🔍 Technical Details
+- Mouse wheel: Navigate through transformation steps
+- R: Initialize new message analysis
+- ESC: Exit to main interface
 
-### Encryption Method
+## Discussion
 
-- Uses a simple shift cipher (Caesar cipher)
-- Default shift key: 3 positions
-- Maintains case sensitivity
-- Handles both uppercase and lowercase letters
-- Non-alphabetic characters remain unchanged
+While this implementation utilizes the Caesar cipher for educational purposes, it's important to note that modern cryptographic systems employ significantly more complex algorithms. This tool serves as a foundational learning instrument rather than a security implementation.
 
-### Implementation
+## Conclusion
 
-- Written in C++ using Raylib for graphics
-- Modular design with separate functions for:
-  - Encryption/Decryption logic
-  - Animation rendering
-  - Interactive learning mode
-  - Menu system
+This visualization tool successfully bridges the gap between theoretical cryptography concepts and practical understanding, providing an interactive platform for cryptography education.
 
-## 🤝 Contributing
+## Future Work
 
-Feel free to contribute to this project:
+Potential enhancements include:
 
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+- Implementation of additional encryption algorithms
+- Network simulation capabilities
+- Advanced visualization features
+- Multi-platform support
 
-## ⚠️ Note
-
-This is an educational tool using a simple cipher for demonstration. Real-world encryption uses much more complex and secure methods.
-
-## 📝 License
-
-This project is open source and available under the MIT License.
-
-## 👥 Authors
+## Authors and Research Team
 
 - [@Younes769](https://github.com/Younes769)
-- [@belkezaimw](https://github.com/belkezaimw) - Collaborator
+- [@belkezaimw](https://github.com/belkezaimw)
+- [@Ryad-bd](https://github.com/Ryad-bd)
+- [@WassimAYC](https://github.com/WassimAYC)
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-- Raylib library for providing the graphics framework
-- The open-source community for inspiration and support
+- Raylib framework development team
+- Open-source cryptography community
+
+## License
+
+This research implementation is available under the MIT License.
