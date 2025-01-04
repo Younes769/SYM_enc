@@ -106,17 +106,16 @@ int main(void)
     SetTargetFPS(60);
 
     while (!WindowShouldClose())
-    {
+    {   
+
+
         // Pause 3bz mra ya 7amid
         if (IsKeyPressed(KEY_P))
         {
             paused = !paused;
         }
 
-        if(mesposition.x != 220 & mesposition.x >= 780){
-            messagestat = "encrypted";
-            col = RED;
-        }
+        
 
         // Restart 3bz mra mktoba press mchi hold
         if (IsKeyPressed(KEY_R))
@@ -155,7 +154,7 @@ int main(void)
 
                 if (mesposition.x >= 785 && txtposition.x >= 785)
                 {
-                    position.x = 501;
+                    position.x = 501;        
                 }
             }
 
@@ -188,8 +187,7 @@ int main(void)
         DrawText(message, txtposition.x, txtposition.y, 12, BLACK);
         DrawText("message :", 350, 500, 20, BLACK);
         DrawText(message, 450, 500, 20, BLACK);
-        DrawText("message status :", 350, 525, 20, BLACK);
-        DrawText(messagestat, 520, 525, 20, col);
+
 
         if (paused)
         {
