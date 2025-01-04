@@ -33,12 +33,14 @@ Before running this project, make sure you have:
 ## 📥 Installation
 
 1. **Clone the Repository**
+
    ```bash
    git clone https://github.com/Younes769/SYM_enc.git
    cd SYM_enc
    ```
 
 2. **Install Raylib**
+
    - Download Raylib from [official website](https://www.raylib.com/)
    - For Windows:
      - Extract to `C:/raylib`
@@ -51,6 +53,7 @@ Before running this project, make sure you have:
 ## 🚀 Building and Running
 
 1. **Using Make**
+
    ```bash
    mingw32-make
    ```
@@ -63,11 +66,13 @@ Before running this project, make sure you have:
 ## 🎮 How to Use
 
 ### Main Menu
+
 - Choose between two visualization modes:
   - "Watch Animation" for the animated demonstration
   - "Step-by-Step Learning" for interactive learning
 
 ### Animation Mode
+
 - Watch how messages are encrypted and decrypted
 - Controls:
   - `P` - Pause/Resume animation
@@ -75,6 +80,7 @@ Before running this project, make sure you have:
   - `ESC` - Return to menu
 
 ### Step-by-Step Mode
+
 - Type your own message
 - Press Enter to see the encryption process
 - Learn how each character is transformed
@@ -86,6 +92,7 @@ Before running this project, make sure you have:
 ## 🔍 Technical Details
 
 ### Encryption Method
+
 - Uses a simple shift cipher (Caesar cipher)
 - Default shift key: 3 positions
 - Maintains case sensitivity
@@ -93,6 +100,7 @@ Before running this project, make sure you have:
 - Non-alphabetic characters remain unchanged
 
 ### Implementation
+
 - Written in C++ using Raylib for graphics
 - Modular design with separate functions for:
   - Encryption/Decryption logic
@@ -103,6 +111,7 @@ Before running this project, make sure you have:
 ## 🤝 Contributing
 
 Feel free to contribute to this project:
+
 1. Fork the repository
 2. Create your feature branch
 3. Commit your changes
@@ -117,10 +126,10 @@ This is an educational tool using a simple cipher for demonstration. Real-world 
 
 This project is open source and available under the MIT License.
 
-## 👥 Authors and Contributors
+## 👥 Authors
 
 - [@Younes769](https://github.com/Younes769)
-- [@belkezaimw](https://github.com/belkezaimw) 
+- [@belkezaimw](https://github.com/belkezaimw) - Collaborator
 
 ## 🙏 Acknowledgments
 
