@@ -192,8 +192,7 @@ void RunAnimationMode(void)
             DrawText(currentMessage, txtposition.x, txtposition.y, 12, BLACK);
             DrawText("message :", 350, 500, 20, BLACK);
             DrawText(currentMessage, 450, 500, 20, BLACK);
-            DrawText("message status :", 350, 525, 20, BLACK);
-            DrawText(messagestat, 520, 525, 20, col);
+
 
             if (paused)
             {
