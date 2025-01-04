@@ -149,10 +149,13 @@ int main(void)
                 message = inputText;
                 isInputActive = false;
                 run = 1;  // Restart animation
-                // Reset positions
+                // Reset positions to starting points
                 position = (Vector2){ 500, 1 };
                 mesposition = (Vector2){ 220, 250 };
                 txtposition = (Vector2){ 225, 280 };
+                velocity.x = abs(velocity.x);  // Ensure velocity is positive
+                messagestat = "decrypted";
+                col = GREEN;
             }
         }
 
@@ -162,42 +165,54 @@ int main(void)
             if (position.x >= 720)
             {
                 position.x = 500;
-                position.y = 0;
+                position.y = 1;
             }
 
-            if (position.x != 500 || position.y != 0)
+            // Key moves down to first computer
+            if (position.x == 500 && position.y < 180)
             {
-                position.x -= velocity.x * 1.2;
                 position.y += velocity.y * 1.2;
                 
+                if (position.y >= 180)  // Reached first PC
+                {
+                    message = EncryptMessage(message, key);
+                    messagestat = "encrypted";
+                    col = RED;
+                    position.x = 501;  // Trigger next phase
+                }
             }
-
-            if (position.x == 500 && position.y == 0)
+            
+            // Message moves to second computer while key returns up
+            if (position.x == 501)
             {
                 mesposition.x += velocity2.x;
                 txtposition.x += velocity2.x;
+                position.y -= velocity.y * 1.2;
                 
-                if (mesposition.x >= 785 && txtposition.x >= 785)
+                if (position.y <= 1)
                 {
-                    position.x = 501;
+                    position.y = 1;
+                }
+                
+                if (mesposition.x >= 785)
+                {
+                    position.x = 720;  // Move key to second PC
                 }
             }
 
-            if (position.x <= 300)
+            // Key moves down to second computer
+            if (position.x == 720)
             {
-                position.x = 500;
-                position.y = 0;
-                message = EncryptMessage(message, key);
-                mesposition.x += velocity2.x;
-                velocity.x *= -1;
-            }
-
-            if (position.x >= 720)
-            {
-                position.x = 500;
-                position.y = 0;
-                message = DecryptMessage(message, key);
-                run = 0;
+                position.y += velocity.y * 1.2;
+                
+                if (position.y >= 180)  // Reached second PC
+                {
+                    message = DecryptMessage(message, key);
+                    messagestat = "decrypted";
+                    col = GREEN;
+                    run = 0;
+                    position = (Vector2){ 500, 1 };
+                }
             }
         }
         
