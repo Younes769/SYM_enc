@@ -5,13 +5,6 @@
 #include <vector>
 #include <string>
 
-// Structure to hold step-by-step encryption info
-struct EncryptionStep {
-    std::string original;
-    std::string encrypted;
-    std::string explanation;
-};
-
 char *EncryptMessage(const char *message, int key)
 {
     char *encryptedMessage = (char *)malloc(strlen(message) + 1);
@@ -65,8 +58,17 @@ char *DecryptMessage(const char *message, int key)
     }
 
     decryptedMessage[strlen(message)] = '\0';
+
     return decryptedMessage;
 }
+
+// Structure to hold step-by-step encryption info
+struct EncryptionStep
+{
+    std::string original;
+    std::string encrypted;
+    std::string explanation;
+};
 
 void RunAnimationMode(void)
 {
@@ -76,9 +78,9 @@ void RunAnimationMode(void)
     bool paused = false;
 
     Color col = GREEN;
-    const char* message = "HELLO WORLD";
+    const char *message = "HELLO WORLD";
     int key = 3;
-    const char* messagestat = "decrypted";
+    const char *messagestat = "decrypted";
 
     // Animation variables
     Vector2 position = {500, 1};
@@ -108,13 +110,15 @@ void RunAnimationMode(void)
     Texture2D mestexture = LoadTextureFromImage(mes);
     UnloadImage(mes);
 
-    char* currentMessage = strdup(message);
+    char *currentMessage = strdup(message);
 
     while (!WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE))
     {
-        if (IsKeyPressed(KEY_P)) paused = !paused;
+        if (IsKeyPressed(KEY_P))
+            paused = !paused;
 
-        if(mesposition.x != 220 && mesposition.x >= 780){
+        if (mesposition.x != 220 && mesposition.x >= 780)
+        {
             messagestat = "encrypted";
             col = RED;
         }
@@ -129,7 +133,7 @@ void RunAnimationMode(void)
             free(currentMessage);
             currentMessage = strdup(message);
             col = GREEN;
-                messagestat = "decrypted";
+            messagestat = "decrypted";
             velocity = (Vector2){1, 1};
             velocity2 = (Vector2){2, 2};
         }
@@ -163,7 +167,7 @@ void RunAnimationMode(void)
             {
                 position.x = 500;
                 position.y = 0;
-                char* temp = currentMessage;
+                char *temp = currentMessage;
                 currentMessage = EncryptMessage(currentMessage, key);
                 free(temp);
                 mesposition.x += velocity2.x;
@@ -174,35 +178,35 @@ void RunAnimationMode(void)
             {
                 position.x = 500;
                 position.y = 0;
-                char* temp = currentMessage;
+                char *temp = currentMessage;
                 currentMessage = DecryptMessage(currentMessage, key);
                 free(temp);
-                    run = 0;
+                run = 0;
             }
         }
 
         BeginDrawing();
-            ClearBackground(WHITE);
+        ClearBackground(WHITE);
 
         DrawTexture(texture, position.x, position.y, WHITE);
         DrawTexture(pc1texture, 10, 180, WHITE);
         DrawTexture(pc2texture, 880, 180, WHITE);
         DrawTexture(mestexture, mesposition.x, mesposition.y, WHITE);
-            DrawText(currentMessage, txtposition.x, txtposition.y, 12, BLACK);
+        DrawText(currentMessage, txtposition.x, txtposition.y, 12, BLACK);
         DrawText("message :", 350, 500, 20, BLACK);
-            DrawText(currentMessage, 450, 500, 20, BLACK);
-            DrawText("message status :", 350, 525, 20, BLACK);
+        DrawText(currentMessage, 450, 500, 20, BLACK);
+        DrawText("message status :", 350, 525, 20, BLACK);
         DrawText(messagestat, 520, 525, 20, col);
 
-            if (paused)
-            {
-                DrawText("Paused (Press P to resume)", 10, 10, 20, RED);
-            }
-            else
-            {
-                DrawText("Press P to pause, R to restart", 10, 10, 20, DARKGRAY);
-            }
-            DrawText("Press ESC to return to menu", 10, 30, 20, DARKGRAY);
+        if (paused)
+        {
+            DrawText("Paused (Press P to resume)", 10, 10, 20, RED);
+        }
+        else
+        {
+            DrawText("Press P to pause, R to restart", 10, 10, 20, DARKGRAY);
+        }
+        DrawText("Press ESC to return to menu", 10, 30, 20, DARKGRAY);
         EndDrawing();
     }
 
@@ -217,18 +221,19 @@ void RunStepByStepMode(void)
 {
     const int screenWidth = 1100;
     const int screenHeight = 600;
-    
+
     char inputText[256] = "";
     int textSize = 0;
     bool isEditing = true;
     const int encryptionKey = 3;
     std::vector<EncryptionStep> steps;
-    Rectangle textBox = { screenWidth/2 - 200, 100, 400, 40 };
-    Vector2 scrollPosition = { 0, 0 };
-    float maxScroll = 0;
-    
+    Rectangle textBox = {screenWidth / 2 - 200, 100, 400, 40};
+    Vector2 scrollPosition = {0, 0};
+    float maxScroll = 0; // To track maximum scroll position
+
     while (!WindowShouldClose() && !IsKeyPressed(KEY_ESCAPE))
     {
+        // Input handling
         if (isEditing)
         {
             int key = GetCharPressed();
@@ -256,7 +261,7 @@ void RunStepByStepMode(void)
             {
                 isEditing = false;
                 steps.clear();
-                
+
                 // Introduction step
                 EncryptionStep intro;
                 intro.original = inputText;
@@ -270,15 +275,15 @@ void RunStepByStepMode(void)
                 concept.encrypted = inputText;
                 concept.explanation = "Symmetric encryption uses the same key for encryption and decryption.";
                 steps.push_back(concept);
-                
+
                 // Show the key and explain shift
                 EncryptionStep keyStep;
                 keyStep.original = inputText;
                 keyStep.encrypted = inputText;
-                keyStep.explanation = TextFormat("We'll use a shift cipher with key = %d (shifting each letter %d positions forward)", 
-                                               encryptionKey, encryptionKey);
+                keyStep.explanation = TextFormat("We'll use a shift cipher with key = %d (shifting each letter %d positions forward)",
+                                                 encryptionKey, encryptionKey);
                 steps.push_back(keyStep);
-                
+
                 // Process each character with detailed explanation
                 std::string currentText = inputText;
                 for (int i = 0; currentText[i] != '\0'; i++)
@@ -287,19 +292,19 @@ void RunStepByStepMode(void)
                     {
                         EncryptionStep step;
                         step.original = currentText;
-                        
+
                         char base = isupper(currentText[i]) ? 'A' : 'a';
                         int originalPos = currentText[i] - base;
                         char encrypted = base + (originalPos + encryptionKey) % 26;
                         currentText[i] = encrypted;
-                        
+
                         step.encrypted = currentText;
-                        step.explanation = TextFormat("Letter '%c' (position %d in alphabet) -> shift by %d -> '%c' (position %d)", 
-                                                    step.original[i], 
-                                                    originalPos + 1,
-                                                    encryptionKey,
-                                                    encrypted,
-                                                    ((originalPos + encryptionKey) % 26) + 1);
+                        step.explanation = TextFormat("Letter '%c' (position %d in alphabet) -> shift by %d -> '%c' (position %d)",
+                                                      step.original[i],
+                                                      originalPos + 1,
+                                                      encryptionKey,
+                                                      encrypted,
+                                                      ((originalPos + encryptionKey) % 26) + 1);
                         steps.push_back(step);
                     }
                 }
@@ -320,86 +325,97 @@ void RunStepByStepMode(void)
             }
         }
 
+        // Mouse wheel for scrolling - Modified for smoother scrolling
         float wheel = GetMouseWheelMove();
         if (wheel != 0)
         {
             scrollPosition.y -= wheel * 40;
-            if (scrollPosition.y < 0) scrollPosition.y = 0;
-            if (scrollPosition.y > maxScroll) scrollPosition.y = maxScroll;
+            if (scrollPosition.y < 0)
+                scrollPosition.y = 0;
+            if (scrollPosition.y > maxScroll)
+                scrollPosition.y = maxScroll;
         }
 
         BeginDrawing();
-            ClearBackground(WHITE);
-            
-            DrawText("Interactive Encryption Learning", screenWidth/2 - MeasureText("Interactive Encryption Learning", 30)/2, 40, 30, BLACK);
-            
-            if (isEditing)
+        ClearBackground(WHITE);
+
+        DrawText("Interactive Encryption Learning", screenWidth / 2 - MeasureText("Interactive Encryption Learning", 30) / 2, 40, 30, BLACK);
+
+        if (isEditing)
+        {
+            DrawRectangleRec(textBox, LIGHTGRAY);
+            DrawRectangleLines(textBox.x, textBox.y, textBox.width, textBox.height, BLACK);
+            DrawText(inputText, textBox.x + 5, textBox.y + 10, 20, BLACK);
+            DrawText("Type your message and press ENTER to see encryption in action!",
+                     screenWidth / 2 - 250, 160, 20, DARKGRAY);
+        }
+        else
+        {
+            // Calculate total content height first
+            float totalHeight = 0;
+            for (size_t i = 0; i < steps.size(); i++)
             {
-        DrawRectangleRec(textBox, LIGHTGRAY);
-                DrawRectangleLines(textBox.x, textBox.y, textBox.width, textBox.height, BLACK);
-                DrawText(inputText, textBox.x + 5, textBox.y + 10, 20, BLACK);
-                DrawText("Type your message and press ENTER to see encryption in action!", 
-                        screenWidth/2 - 250, 160, 20, DARKGRAY);
+                totalHeight += 90; // Height of each step
             }
-            else
+            maxScroll = totalHeight - (screenHeight - 200); // Update max scroll position
+            if (maxScroll < 0)
+                maxScroll = 0;
+
+            // Draw scrollbar
+            float scrollBarHeight = (screenHeight - 200) * ((screenHeight - 200) / totalHeight);
+            float scrollBarY = 180 + (scrollPosition.y / maxScroll) * (screenHeight - 200 - scrollBarHeight);
+            if (maxScroll > 0)
             {
-                float totalHeight = 0;
-                for (size_t i = 0; i < steps.size(); i++)
-                {
-                    totalHeight += 90;
-                }
-                maxScroll = totalHeight - (screenHeight - 200);
-                if (maxScroll < 0) maxScroll = 0;
+                DrawRectangle(screenWidth - 20, 180, 10, screenHeight - 200, LIGHTGRAY);
+                DrawRectangle(screenWidth - 20, scrollBarY, 10, scrollBarHeight, GRAY);
+            }
 
-                float scrollBarHeight = (screenHeight - 200) * ((screenHeight - 200) / totalHeight);
-                float scrollBarY = 180 + (scrollPosition.y / maxScroll) * (screenHeight - 200 - scrollBarHeight);
-                if (maxScroll > 0)
+            // Draw content
+            float yPos = 180 - scrollPosition.y;
+            for (const auto &step : steps)
+            {
+                // Only draw if in visible area (with some padding)
+                if (yPos + 90 >= 160 && yPos <= screenHeight)
                 {
-                    DrawRectangle(screenWidth - 20, 180, 10, screenHeight - 200, LIGHTGRAY);
-                    DrawRectangle(screenWidth - 20, scrollBarY, 10, scrollBarHeight, GRAY);
-                }
+                    // Draw explanation with a light background
+                    DrawRectangle(30, yPos - 5, screenWidth - 70, 30, LIGHTGRAY);
+                    DrawText(step.explanation.c_str(), 50, yPos, 20, BLACK);
 
-                float yPos = 180 - scrollPosition.y;
-                for (const auto& step : steps)
-                {
-                    if (yPos + 90 >= 160 && yPos <= screenHeight)
+                    // Draw the text transformation
+                    if (step.original != step.encrypted)
                     {
-                        DrawRectangle(30, yPos - 5, screenWidth - 70, 30, LIGHTGRAY);
-                        DrawText(step.explanation.c_str(), 50, yPos, 20, BLACK);
-                        
-                        if (step.original != step.encrypted)
-                        {
-                            DrawText(step.original.c_str(), 50, yPos + 35, 20, DARKGRAY);
-                            DrawText("→", screenWidth/2 - 20, yPos + 35, 20, BLACK);
-                            DrawText(step.encrypted.c_str(), screenWidth/2 + 20, yPos + 35, 20, RED);
-                        }
-                        
-                        DrawLine(30, yPos + 70, screenWidth - 30, yPos + 70, LIGHTGRAY);
+                        DrawText(step.original.c_str(), 50, yPos + 35, 20, DARKGRAY);
+                        DrawText("→", screenWidth / 2 - 20, yPos + 35, 20, BLACK);
+                        DrawText(step.encrypted.c_str(), screenWidth / 2 + 20, yPos + 35, 20, RED);
                     }
-                    yPos += 90;
-                }
 
-                if (scrollPosition.y > 0)
-                {
-                    DrawText("▲", screenWidth - 25, 160, 20, DARKGRAY);
+                    DrawLine(30, yPos + 70, screenWidth - 30, yPos + 70, LIGHTGRAY);
                 }
-                if (scrollPosition.y < maxScroll)
-                {
-                    DrawText("▼", screenWidth - 25, screenHeight - 20, 20, DARKGRAY);
-                }
-                
-                DrawText("Press R to try with a new message", 10, screenHeight - 30, 20, DARKGRAY);
-                if (IsKeyPressed(KEY_R))
-                {
-                    isEditing = true;
-                    textSize = 0;
-                    inputText[0] = '\0';
-                    steps.clear();
-                    scrollPosition = {0, 0};
-                }
+                yPos += 90;
             }
-            
-            DrawText("Press ESC to return to menu", 10, 10, 20, DARKGRAY);
+
+            // Draw scroll indicators if needed
+            if (scrollPosition.y > 0)
+            {
+                DrawText("▲", screenWidth - 25, 160, 20, DARKGRAY);
+            }
+            if (scrollPosition.y < maxScroll)
+            {
+                DrawText("▼", screenWidth - 25, screenHeight - 20, 20, DARKGRAY);
+            }
+
+            DrawText("Press R to try with a new message", 10, screenHeight - 30, 20, DARKGRAY);
+            if (IsKeyPressed(KEY_R))
+            {
+                isEditing = true;
+                textSize = 0;
+                inputText[0] = '\0';
+                steps.clear();
+                scrollPosition = {0, 0};
+            }
+        }
+
+        DrawText("Press ESC to return to menu", 10, 10, 20, DARKGRAY);
 
         EndDrawing();
     }
@@ -409,61 +425,70 @@ int main(void)
 {
     const int screenWidth = 1100;
     const int screenHeight = 600;
-    
+
     InitWindow(screenWidth, screenHeight, "Symmetric Encryption Visualization");
     SetTargetFPS(60);
-    
-    enum GameScreen { MENU = 0, ANIMATION, STEP_BY_STEP } currentScreen = MENU;
-    
-    Rectangle animationButton = { screenWidth/2 - 150, screenHeight/2 - 50, 300, 60 };
-    Rectangle stepByStepButton = { screenWidth/2 - 150, screenHeight/2 + 30, 300, 60 };
-    Rectangle exitButton = { screenWidth/2 - 150, screenHeight/2 + 110, 300, 60 };
-    
+
+    enum GameScreen
+    {
+        MENU = 0,
+        ANIMATION,
+        STEP_BY_STEP
+    } currentScreen = MENU;
+
+    Rectangle animationButton = {screenWidth / 2 - 150, screenHeight / 2 - 50, 300, 60};
+    Rectangle stepByStepButton = {screenWidth / 2 - 150, screenHeight / 2 + 30, 300, 60};
+    Rectangle exitButton = {screenWidth / 2 - 150, screenHeight / 2 + 110, 300, 60};
+
     while (!WindowShouldClose())
     {
-        switch(currentScreen)
+        switch (currentScreen)
         {
-            case MENU:
-            {
-                Vector2 mousePoint = GetMousePosition();
-                
-                if (CheckCollisionPointRec(mousePoint, animationButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-                    currentScreen = ANIMATION;
-                
-                if (CheckCollisionPointRec(mousePoint, stepByStepButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-                    currentScreen = STEP_BY_STEP;
-                
-                if (CheckCollisionPointRec(mousePoint, exitButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-                    break;
-                
-                BeginDrawing();
-                    ClearBackground(WHITE);
-                    
-                    DrawText("Symmetric Encryption", screenWidth/2 - MeasureText("Symmetric Encryption", 40)/2, 100, 40, BLACK);
-                    DrawText("Learning Tool", screenWidth/2 - MeasureText("Learning Tool", 30)/2, 150, 30, DARKGRAY);
-                    
-                    DrawRectangleRec(animationButton, CheckCollisionPointRec(mousePoint, animationButton) ? LIGHTGRAY : GRAY);
-                    DrawRectangleRec(stepByStepButton, CheckCollisionPointRec(mousePoint, stepByStepButton) ? LIGHTGRAY : GRAY);
-                    DrawRectangleRec(exitButton, CheckCollisionPointRec(mousePoint, exitButton) ? LIGHTGRAY : GRAY);
-                    
-                    DrawText("Watch Animation", animationButton.x + 60, animationButton.y + 20, 20, BLACK);
-                    DrawText("Step-by-Step Learning", stepByStepButton.x + 50, stepByStepButton.y + 20, 20, BLACK);
-                    DrawText("Exit", exitButton.x + 130, exitButton.y + 20, 20, BLACK);
-                EndDrawing();
-            } break;
-            
-            case ANIMATION:
-                RunAnimationMode();
-                currentScreen = MENU;
+        case MENU:
+        {
+            Vector2 mousePoint = GetMousePosition();
+
+            // Check button clicks
+            if (CheckCollisionPointRec(mousePoint, animationButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+                currentScreen = ANIMATION;
+
+            if (CheckCollisionPointRec(mousePoint, stepByStepButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+                currentScreen = STEP_BY_STEP;
+
+            if (CheckCollisionPointRec(mousePoint, exitButton) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
                 break;
-                
-            case STEP_BY_STEP:
-                RunStepByStepMode();
-                currentScreen = MENU;
-                break;
+
+            BeginDrawing();
+            ClearBackground(WHITE);
+
+            DrawText("Symmetric Encryption", screenWidth / 2 - MeasureText("Symmetric Encryption", 40) / 2, 100, 40, BLACK);
+            DrawText("Learning Tool", screenWidth / 2 - MeasureText("Learning Tool", 30) / 2, 150, 30, DARKGRAY);
+
+            // Draw buttons
+            DrawRectangleRec(animationButton, CheckCollisionPointRec(mousePoint, animationButton) ? LIGHTGRAY : GRAY);
+            DrawRectangleRec(stepByStepButton, CheckCollisionPointRec(mousePoint, stepByStepButton) ? LIGHTGRAY : GRAY);
+            DrawRectangleRec(exitButton, CheckCollisionPointRec(mousePoint, exitButton) ? LIGHTGRAY : GRAY);
+
+            DrawText("Watch Animation", animationButton.x + 60, animationButton.y + 20, 20, BLACK);
+            DrawText("Step-by-Step Learning", stepByStepButton.x + 50, stepByStepButton.y + 20, 20, BLACK);
+            DrawText("Exit", exitButton.x + 130, exitButton.y + 20, 20, BLACK);
+            EndDrawing();
         }
-        
-        if (WindowShouldClose()) break;
+        break;
+
+        case ANIMATION:
+            RunAnimationMode();
+            currentScreen = MENU;
+            break;
+
+        case STEP_BY_STEP:
+            RunStepByStepMode();
+            currentScreen = MENU;
+            break;
+        }
+
+        if (WindowShouldClose())
+            break;
     }
 
     CloseWindow();
