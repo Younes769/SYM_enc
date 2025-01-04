@@ -70,7 +70,16 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "Symmetric Encryption Animation");
     Color col = GREEN;
     SetTargetFPS(60);
-    const char *message = "HELLO WORLD";
+
+    // Input box variables
+    char inputText[256] = "";  // Store input text
+    int letterCount = 0;       // Count letters in input
+    Rectangle textBox = { 350, 100, 300, 30 };  // Input text box
+    bool mouseOnText = false;  // Check if mouse is on text box
+    bool isInputActive = false;  // Check if we're typing
+    int framesCounter = 0;     // Frames counter for cursor blink
+
+    const char *message = "Click to enter message";  // Default message
     int key = 3;
     const char *messagestat = "decrypted";
     Vector2 position = {500, 1}; // win ybda l key
@@ -103,9 +112,53 @@ int main(void)
 
     while (!WindowShouldClose())
     {
+        // Update input box
+        mouseOnText = CheckCollisionPointRec(GetMousePosition(), textBox);
+        
+        if (mouseOnText && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            isInputActive = true;
+            letterCount = strlen(inputText);
+        } else if (!mouseOnText && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            isInputActive = false;
+        }
+
+        if (isInputActive) {
+            // Get char pressed (unicode character) on the queue
+            int key = GetCharPressed();
+
+            // Check if more characters have been pressed
+            while (key > 0) {
+                // Only allow keys in range [32..125]
+                if ((key >= 32) && (key <= 125) && (letterCount < 255)) {
+                    inputText[letterCount] = (char)key;
+                    inputText[letterCount + 1] = '\0';
+                    letterCount++;
+                }
+                key = GetCharPressed();  // Check next character in the queue
+            }
+
+            // Delete characters
+            if (IsKeyPressed(KEY_BACKSPACE)) {
+                letterCount--;
+                if (letterCount < 0) letterCount = 0;
+                inputText[letterCount] = '\0';
+            }
+
+            // Submit text
+            if (IsKeyPressed(KEY_ENTER) && letterCount > 0) {
+                message = inputText;
+                isInputActive = false;
+                run = 1;  // Restart animation
+                // Reset positions
+                position = (Vector2){ 500, 1 };
+                mesposition = (Vector2){ 220, 250 };
+                txtposition = (Vector2){ 225, 280 };
+            }
+        }
+
+        // Animation logic
         if (run == 1)
         {
-
             if (position.x >= 720)
             {
                 position.x = 500;
@@ -161,6 +214,23 @@ int main(void)
         DrawText(message, 450, 500, 20, BLACK);
         DrawText("messag status :", 350, 525, 20, BLACK);
         DrawText(messagestat, 520, 525, 20, col);
+
+        // Draw input box
+        DrawRectangleRec(textBox, LIGHTGRAY);
+        DrawRectangleLines(textBox.x, textBox.y, textBox.width, textBox.height, mouseOnText ? RED : DARKGRAY);
+        DrawText(inputText, textBox.x + 5, textBox.y + 4, 20, BLACK);
+
+        // Draw cursor blink
+        if (isInputActive) {
+            framesCounter++;
+            if (((framesCounter/30)%2) == 0) {
+                DrawText("_", textBox.x + 8 + MeasureText(inputText, 20), textBox.y + 4, 20, BLACK);
+            }
+        }
+
+        // Draw instruction
+        DrawText("Type your message and press ENTER", 350, 70, 20, DARKGRAY);
+
         EndDrawing();
     }
 
