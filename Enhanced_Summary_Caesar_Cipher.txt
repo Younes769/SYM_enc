@@ -1,0 +1,52 @@
+
+Enhanced Summary of the Code
+
+This C++ program, developed with the **Raylib** library, serves as an engaging educational tool for teaching the fundamentals of symmetric encryption, focusing on the **Caesar Cipher**. It features two main modes for user interaction:
+
+---
+
+1. Animation Mode
+Objective: Provide a dynamic visualization of the encryption and decryption processes.
+
+Key Features:
+- Message Transformation:
+  - The plaintext message is animated across the screen as it moves between devices (represented by computer icons).
+  - It undergoes:
+    - Encryption: Letters are shifted forward in the alphabet based on a fixed key.
+    - Decryption: Letters are shifted back using the same key.
+- Real-Time Feedback:
+  - The status of the message (encrypted or decrypted) is displayed with its updated content.
+- Interactive Controls:
+  - Pause, restart, or exit the simulation using keyboard shortcuts for a seamless experience.
+
+---
+
+2. Step-by-Step Mode
+Objective: Offer an in-depth explanation of how the Caesar Cipher works, with user input and interactive visuals.
+
+Key Features:
+- Interactive Learning:
+  - Users type a message to see it encrypted step-by-step.
+  - Each transformation is explained in detail, highlighting:
+    - The concept of symmetric encryption.
+    - How individual characters are shifted in the alphabet.
+    - Case sensitivity and position calculations.
+- Scrollable Interface:
+  - Detailed explanations and transformations are presented in a visually organized, scrollable interface.
+- Reset Functionality:
+  - Users can restart with new inputs for additional practice.
+
+---
+
+Additional Features
+- User-Friendly Navigation:
+  - Buttons and mouse-based interactions in the menu for easy mode selection.
+- Educational Value:
+  - Perfect for beginners, as it simplifies cryptographic concepts through clear visualization.
+- Customizable Experience:
+  - Options to pause animations, reset simulations, or explore step-by-step details.
+
+---
+
+Purpose
+This program combines visual and interactive elements to demystify the Caesar Cipher and symmetric encryption, making it an ideal tool for learning cryptography basics in an engaging, hands-on manner.
